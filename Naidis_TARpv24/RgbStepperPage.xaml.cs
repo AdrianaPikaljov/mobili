@@ -17,15 +17,14 @@ public partial class RgbStepperPage : ContentPage
     Frame boxR, boxG, boxB;
 
     // Ruudu omaduste stepperid
-    Label lblSize, lblRadius, lblOpacity;
-    Stepper stSize, stRadius, stOpacity;
+    Label lblSize, lblRadius;
+    Stepper stSize, stRadius;
 
     Frame colorFrame;
     Button btnRandom;
 
     AbsoluteLayout abs;
 
-    bool _syncing = false;
 
     public RgbStepperPage() : this(0) { }
 
@@ -49,27 +48,22 @@ public partial class RgbStepperPage : ContentPage
             HorizontalTextAlignment = TextAlignment.Center
         };
 
-        // Väärtuse tekstid
         lblR = new Label { Text = "R: 0" };
         lblG = new Label { Text = "G: 0" };
         lblB = new Label { Text = "B: 0" };
 
-        // Sliderid
         slR = MakeSlider();
         slG = MakeSlider();
         slB = MakeSlider();
 
-        // Stepperid RGB jaoks
         stR = MakeStepperRGB();
         stG = MakeStepperRGB();
         stB = MakeStepperRGB();
 
-        // ÜLAL 3 VÄIKEST RUUTU (näitab kanaleid eraldi)
         boxR = MakeSmallBox(Color.FromRgb(0, 0, 0));
         boxG = MakeSmallBox(Color.FromRgb(0, 0, 0));
         boxB = MakeSmallBox(Color.FromRgb(0, 0, 0));
 
-        // Suur värviruut
         colorFrame = new Frame
         {
             WidthRequest = 260,
@@ -79,7 +73,6 @@ public partial class RgbStepperPage : ContentPage
             BackgroundColor = Color.FromRgb(0, 0, 0)
         };
 
-        // Random nupp
         btnRandom = new Button
         {
             Text = "Juhuslik värv",
@@ -87,20 +80,15 @@ public partial class RgbStepperPage : ContentPage
         };
         btnRandom.Clicked += async (s, e) => await RandomColorAsync();
 
-        // Ruudu omaduste stepperid
         lblSize = new Label { Text = "Suurus: 260" };
         lblRadius = new Label { Text = "Nurgad: 25" };
-        lblOpacity = new Label { Text = "Läbipaistvus: 1.0" };
 
-        stSize = new Stepper { Minimum = 120, Maximum = 320, Increment = 10, Value = 260 };
+        stSize = new Stepper { Minimum = 120, Maximum = 250, Increment = 10, Value = 180 };
         stRadius = new Stepper { Minimum = 0, Maximum = 80, Increment = 5, Value = 25 };
-        stOpacity = new Stepper { Minimum = 0, Maximum = 1, Increment = 0.1, Value = 1 };
 
         stSize.ValueChanged += (s, e) => UpdatePreview();
         stRadius.ValueChanged += (s, e) => UpdatePreview();
-        stOpacity.ValueChanged += (s, e) => UpdatePreview();
 
-        // Eventid RGB
         slR.ValueChanged += OnSliderChanged;
         slG.ValueChanged += OnSliderChanged;
         slB.ValueChanged += OnSliderChanged;
@@ -109,13 +97,11 @@ public partial class RgbStepperPage : ContentPage
         stG.ValueChanged += OnStepperChanged;
         stB.ValueChanged += OnStepperChanged;
 
-        // Layout
         abs = new AbsoluteLayout();
 
         abs.Children.Add(lblTitle);
         abs.Children.Add(lblInfo);
 
-        // ÜLAL 3 RUUTU
         abs.Children.Add(boxR);
         abs.Children.Add(boxG);
         abs.Children.Add(boxB);
@@ -130,29 +116,26 @@ public partial class RgbStepperPage : ContentPage
 
         abs.Children.Add(lblSize); abs.Children.Add(stSize);
         abs.Children.Add(lblRadius); abs.Children.Add(stRadius);
-        abs.Children.Add(lblOpacity); abs.Children.Add(stOpacity);
 
-        abs.Children.Add(btnRandom);
         abs.Children.Add(colorFrame);
+        abs.Children.Add(btnRandom);
 
         // Paigutus
+
         AbsoluteLayout.SetLayoutBounds(lblTitle, new Rect(0.5, 15, 200, 30));
         AbsoluteLayout.SetLayoutFlags(lblTitle, AbsoluteLayoutFlags.PositionProportional);
 
         AbsoluteLayout.SetLayoutBounds(lblInfo, new Rect(0.5, 45, 280, 25));
         AbsoluteLayout.SetLayoutFlags(lblInfo, AbsoluteLayoutFlags.PositionProportional);
 
-        // 3 ruutu ülal (kõrvuti)
         AbsoluteLayout.SetLayoutBounds(boxR, new Rect(60, 80, 55, 55));
         AbsoluteLayout.SetLayoutBounds(boxG, new Rect(130, 80, 55, 55));
         AbsoluteLayout.SetLayoutBounds(boxB, new Rect(200, 80, 55, 55));
 
-        // R/G/B tekstid sliderite jaoks
         AbsoluteLayout.SetLayoutBounds(lblR, new Rect(20, 150, 80, 20));
         AbsoluteLayout.SetLayoutBounds(lblG, new Rect(20, 200, 80, 20));
         AbsoluteLayout.SetLayoutBounds(lblB, new Rect(20, 250, 80, 20));
 
-        // Sliderid + stepperid
         AbsoluteLayout.SetLayoutBounds(slR, new Rect(20, 170, 240, 40));
         AbsoluteLayout.SetLayoutBounds(stR, new Rect(270, 170, 90, 40));
 
@@ -162,30 +145,25 @@ public partial class RgbStepperPage : ContentPage
         AbsoluteLayout.SetLayoutBounds(slB, new Rect(20, 270, 240, 40));
         AbsoluteLayout.SetLayoutBounds(stB, new Rect(270, 270, 90, 40));
 
-        // Random nupp
-        AbsoluteLayout.SetLayoutBounds(btnRandom, new Rect(0.5, 0.40, 200, 45));
-        AbsoluteLayout.SetLayoutFlags(btnRandom, AbsoluteLayoutFlags.PositionProportional);
-
-        // Ruudu omadused
         AbsoluteLayout.SetLayoutBounds(lblSize, new Rect(20, 360, 150, 25));
         AbsoluteLayout.SetLayoutBounds(stSize, new Rect(180, 355, 160, 40));
 
         AbsoluteLayout.SetLayoutBounds(lblRadius, new Rect(20, 405, 150, 25));
         AbsoluteLayout.SetLayoutBounds(stRadius, new Rect(180, 400, 160, 40));
 
-        AbsoluteLayout.SetLayoutBounds(lblOpacity, new Rect(20, 450, 160, 25));
-        AbsoluteLayout.SetLayoutBounds(stOpacity, new Rect(180, 445, 160, 40));
-
-        // Suur värviruut all
+        // Suur värviruut
         AbsoluteLayout.SetLayoutBounds(colorFrame, new Rect(0.5, 0.88, 280, 280));
         AbsoluteLayout.SetLayoutFlags(colorFrame, AbsoluteLayoutFlags.PositionProportional);
 
+        // Random nupp värviruudu all
+        AbsoluteLayout.SetLayoutBounds(btnRandom, new Rect(0.5, 0.97, 200, 50));
+        AbsoluteLayout.SetLayoutFlags(btnRandom, AbsoluteLayoutFlags.PositionProportional);
+
         Content = new ScrollView { Content = abs };
 
-        // Algväärtus (magenta)
         SetRgb(255, 0, 255);
         UpdatePreview();
-        UpdateChannelBoxes(); // <-- oluline
+        UpdateChannelBoxes();
     }
 
     Frame MakeSmallBox(Color c) => new Frame
@@ -203,30 +181,32 @@ public partial class RgbStepperPage : ContentPage
 
     void OnSliderChanged(object? sender, ValueChangedEventArgs e)
     {
-        if (_syncing) return;
-        _syncing = true;
+        int value = Convert.ToInt32(e.NewValue);
 
-        if (sender == slR) stR.Value = Convert.ToInt32(e.NewValue);
-        else if (sender == slG) stG.Value = Convert.ToInt32(e.NewValue);
-        else if (sender == slB) stB.Value = Convert.ToInt32(e.NewValue);
+        if (sender == slR && stR.Value != value)
+            stR.Value = value;
+        else if (sender == slG && stG.Value != value)
+            stG.Value = value;
+        else if (sender == slB && stB.Value != value)
+            stB.Value = value;
 
         UpdateColor();
-        UpdateChannelBoxes(); // <-- uuendab ülemisi ruute
-        _syncing = false;
+        UpdateChannelBoxes();
     }
 
     void OnStepperChanged(object? sender, ValueChangedEventArgs e)
     {
-        if (_syncing) return;
-        _syncing = true;
+        int value = Convert.ToInt32(e.NewValue);
 
-        if (sender == stR) slR.Value = Convert.ToInt32(e.NewValue);
-        else if (sender == stG) slG.Value = Convert.ToInt32(e.NewValue);
-        else if (sender == stB) slB.Value = Convert.ToInt32(e.NewValue);
+        if (sender == stR && slR.Value != value)
+            slR.Value = value;
+        else if (sender == stG && slG.Value != value)
+            slG.Value = value;
+        else if (sender == stB && slB.Value != value)
+            slB.Value = value;
 
         UpdateColor();
-        UpdateChannelBoxes(); // <-- uuendab ülemisi ruute
-        _syncing = false;
+        UpdateChannelBoxes();
     }
 
     void UpdateColor()
@@ -243,14 +223,12 @@ public partial class RgbStepperPage : ContentPage
         lblB.Text = "B: " + b;
     }
 
-    // ÜLAL 3 RUUTU: näitavad eraldi kanalit
     void UpdateChannelBoxes()
     {
         int r = Convert.ToInt32(slR.Value);
         int g = Convert.ToInt32(slG.Value);
         int b = Convert.ToInt32(slB.Value);
 
-        // ainult vastav kanal, teised 0
         boxR.BackgroundColor = Color.FromRgb(r, 0, 0);
         boxG.BackgroundColor = Color.FromRgb(0, g, 0);
         boxB.BackgroundColor = Color.FromRgb(0, 0, b);
@@ -265,19 +243,20 @@ public partial class RgbStepperPage : ContentPage
 
         colorFrame.CornerRadius = (float)stRadius.Value;
         lblRadius.Text = "Nurgad: " + Convert.ToInt32(stRadius.Value);
-
-        colorFrame.Opacity = stOpacity.Value;
-        lblOpacity.Text = "Läbipaistvus: " + stOpacity.Value.ToString("0.0");
     }
 
     void SetRgb(int r, int g, int b)
     {
-        _syncing = true;
-        slR.Value = r; slG.Value = g; slB.Value = b;
-        stR.Value = r; stG.Value = g; stB.Value = b;
+        slR.Value = r;
+        slG.Value = g;
+        slB.Value = b;
+
+        stR.Value = r;
+        stG.Value = g;
+        stB.Value = b;
+
         UpdateColor();
         UpdateChannelBoxes();
-        _syncing = false;
     }
 
     async Task RandomColorAsync()
