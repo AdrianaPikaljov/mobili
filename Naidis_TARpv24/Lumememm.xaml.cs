@@ -6,17 +6,14 @@ public partial class Lumememm : ContentPage
 {
     AbsoluteLayout abs;
     VerticalStackLayout vst;
-    Label pealdis, tegevusLbl, heledusLbl, kiirusLbl;
+    Label pealdis, tegevusLbl;
     Picker picker;
     Button kaivitaNupp;
-    Slider heledusSlider;
-    Stepper kiirusStepper;
 
     Frame amber, pea, keha;
     BoxView vasakSilm, paremSilm, nina, nupp1, nupp2, nupp3;
 
     Random rnd = new Random();
-    uint kiirus = 1000;
 
     public Lumememm()
     {
@@ -26,9 +23,7 @@ public partial class Lumememm : ContentPage
         {
             Text = "Lumememm",
             FontSize = 40,
-            FontFamily = "Luffio",
             HorizontalOptions = LayoutOptions.Center,
-            VerticalOptions = LayoutOptions.Center,
             TextColor = Colors.Black
         };
 
@@ -49,7 +44,6 @@ public partial class Lumememm : ContentPage
             HasShadow = false
         };
         AbsoluteLayout.SetLayoutBounds(amber, new Rect(165, 20, 70, 30));
-        AbsoluteLayout.SetLayoutFlags(amber, AbsoluteLayoutFlags.None);
         abs.Add(amber);
 
         pea = new Frame
@@ -58,11 +52,9 @@ public partial class Lumememm : ContentPage
             WidthRequest = 80,
             HeightRequest = 80,
             CornerRadius = 40,
-            Padding = 0,
-            HasShadow = true
+            Padding = 0
         };
         AbsoluteLayout.SetLayoutBounds(pea, new Rect(160, 50, 80, 80));
-        AbsoluteLayout.SetLayoutFlags(pea, AbsoluteLayoutFlags.None);
         abs.Add(pea);
 
         keha = new Frame
@@ -71,11 +63,9 @@ public partial class Lumememm : ContentPage
             WidthRequest = 120,
             HeightRequest = 120,
             CornerRadius = 60,
-            Padding = 0,
-            HasShadow = true
+            Padding = 0
         };
         AbsoluteLayout.SetLayoutBounds(keha, new Rect(140, 135, 120, 120));
-        AbsoluteLayout.SetLayoutFlags(keha, AbsoluteLayoutFlags.None);
         abs.Add(keha);
 
         vasakSilm = new BoxView
@@ -86,7 +76,6 @@ public partial class Lumememm : ContentPage
             CornerRadius = 4
         };
         AbsoluteLayout.SetLayoutBounds(vasakSilm, new Rect(182, 80, 8, 8));
-        AbsoluteLayout.SetLayoutFlags(vasakSilm, AbsoluteLayoutFlags.None);
         abs.Add(vasakSilm);
 
         paremSilm = new BoxView
@@ -97,7 +86,6 @@ public partial class Lumememm : ContentPage
             CornerRadius = 4
         };
         AbsoluteLayout.SetLayoutBounds(paremSilm, new Rect(210, 80, 8, 8));
-        AbsoluteLayout.SetLayoutFlags(paremSilm, AbsoluteLayoutFlags.None);
         abs.Add(paremSilm);
 
         nina = new BoxView
@@ -108,7 +96,6 @@ public partial class Lumememm : ContentPage
             CornerRadius = 2
         };
         AbsoluteLayout.SetLayoutBounds(nina, new Rect(194, 97, 14, 6));
-        AbsoluteLayout.SetLayoutFlags(nina, AbsoluteLayoutFlags.None);
         abs.Add(nina);
 
         nupp1 = new BoxView
@@ -119,7 +106,6 @@ public partial class Lumememm : ContentPage
             CornerRadius = 5
         };
         AbsoluteLayout.SetLayoutBounds(nupp1, new Rect(195, 165, 10, 10));
-        AbsoluteLayout.SetLayoutFlags(nupp1, AbsoluteLayoutFlags.None);
         abs.Add(nupp1);
 
         nupp2 = new BoxView
@@ -130,7 +116,6 @@ public partial class Lumememm : ContentPage
             CornerRadius = 5
         };
         AbsoluteLayout.SetLayoutBounds(nupp2, new Rect(195, 195, 10, 10));
-        AbsoluteLayout.SetLayoutFlags(nupp2, AbsoluteLayoutFlags.None);
         abs.Add(nupp2);
 
         nupp3 = new BoxView
@@ -141,18 +126,19 @@ public partial class Lumememm : ContentPage
             CornerRadius = 5
         };
         AbsoluteLayout.SetLayoutBounds(nupp3, new Rect(195, 225, 10, 10));
-        AbsoluteLayout.SetLayoutFlags(nupp3, AbsoluteLayoutFlags.None);
         abs.Add(nupp3);
 
         picker = new Picker
         {
             Title = "Vali tegevus"
         };
+
         picker.Items.Add("Peida lumememm");
         picker.Items.Add("Näita lumememm");
-        picker.Items.Add("Muuda värvi");
+        picker.Items.Add("Muuda lumememmi värvi");
         picker.Items.Add("Sulata");
         picker.Items.Add("Tantsi");
+        picker.Items.Add("Muuda ämbri värvi");
 
         tegevusLbl = new Label
         {
@@ -173,42 +159,13 @@ public partial class Lumememm : ContentPage
         kaivitaNupp = new Button
         {
             Text = "Käivita tegevus",
-            FontFamily = "Luffio",
             FontSize = 28,
             BackgroundColor = Colors.LightGray,
             TextColor = Colors.Black,
             CornerRadius = 10
         };
+
         kaivitaNupp.Clicked += KaivitaNupp_Clicked;
-
-        heledusLbl = new Label
-        {
-            Text = "Läbipaistvus: 1.0",
-            FontSize = 22
-        };
-
-        heledusSlider = new Slider
-        {
-            Minimum = 0,
-            Maximum = 1,
-            Value = 1
-        };
-        heledusSlider.ValueChanged += HeledusSlider_ValueChanged;
-
-        kiirusLbl = new Label
-        {
-            Text = "Kiirus: 1000 ms",
-            FontSize = 22
-        };
-
-        kiirusStepper = new Stepper
-        {
-            Minimum = 200,
-            Maximum = 3000,
-            Increment = 200,
-            Value = 1000
-        };
-        kiirusStepper.ValueChanged += KiirusStepper_ValueChanged;
 
         vst = new VerticalStackLayout
         {
@@ -221,38 +178,11 @@ public partial class Lumememm : ContentPage
         vst.Add(picker);
         vst.Add(kaivitaNupp);
         vst.Add(tegevusLbl);
-        vst.Add(heledusLbl);
-        vst.Add(heledusSlider);
-        vst.Add(kiirusLbl);
-        vst.Add(kiirusStepper);
 
         Content = new ScrollView { Content = vst };
     }
 
-    private void KiirusStepper_ValueChanged(object? sender, ValueChangedEventArgs e)
-    {
-        kiirus = (uint)e.NewValue;
-        kiirusLbl.Text = "Kiirus: " + kiirus + " ms";
-    }
-
-    private void HeledusSlider_ValueChanged(object? sender, ValueChangedEventArgs e)
-    {
-        double value = e.NewValue;
-
-        amber.Opacity = value;
-        pea.Opacity = value;
-        keha.Opacity = value;
-        vasakSilm.Opacity = value;
-        paremSilm.Opacity = value;
-        nina.Opacity = value;
-        nupp1.Opacity = value;
-        nupp2.Opacity = value;
-        nupp3.Opacity = value;
-
-        heledusLbl.Text = "Läbipaistvus: " + value.ToString("F1");
-    }
-
-    private async void KaivitaNupp_Clicked(object? sender, EventArgs e)
+    private async void KaivitaNupp_Clicked(object sender, EventArgs e)
     {
         if (picker.SelectedIndex == -1)
         {
@@ -261,17 +191,17 @@ public partial class Lumememm : ContentPage
         }
 
         string tegevus = picker.Items[picker.SelectedIndex];
-        tegevusLbl.Text = "Valitud tegevus: " + tegevus;
 
         if (tegevus == "Peida lumememm")
         {
-            PeidaLumememm();
+            abs.IsVisible = false;
+            tegevusLbl.Text = "Lumememm on peidetud";
         }
         else if (tegevus == "Näita lumememm")
         {
             NaitaLumememm();
         }
-        else if (tegevus == "Muuda värvi")
+        else if (tegevus == "Muuda lumememmi värvi")
         {
             await MuudaVarvi();
         }
@@ -283,12 +213,10 @@ public partial class Lumememm : ContentPage
         {
             await Tantsi();
         }
-    }
-
-    private void PeidaLumememm()
-    {
-        abs.IsVisible = false;
-        tegevusLbl.Text = "Lumememm on peidetud";
+        else if (tegevus == "Muuda ämbri värvi")
+        {
+            await MuudaAmbriVarvi();
+        }
     }
 
     private void NaitaLumememm()
@@ -308,15 +236,31 @@ public partial class Lumememm : ContentPage
         amber.Scale = 1;
         pea.Scale = 1;
         keha.Scale = 1;
+        vasakSilm.Scale = 1;
+        paremSilm.Scale = 1;
+        nina.Scale = 1;
+        nupp1.Scale = 1;
+        nupp2.Scale = 1;
+        nupp3.Scale = 1;
 
         abs.TranslationX = 0;
 
-        tegevusLbl.Text = "Lumememm on nähtav";
+        pea.BackgroundColor = Colors.White;
+        keha.BackgroundColor = Colors.White;
+        amber.BackgroundColor = Colors.Brown;
+        vasakSilm.Color = Colors.Black;
+        paremSilm.Color = Colors.Black;
+        nina.Color = Colors.Orange;
+        nupp1.Color = Colors.Black;
+        nupp2.Color = Colors.Black;
+        nupp3.Color = Colors.Black;
+
+        tegevusLbl.Text = "Lumememm on taastatud";
     }
 
     private async Task MuudaVarvi()
     {
-        bool vastus = await DisplayAlert("Kinnitus", "Kas soovid värvi muuta?", "Jah", "Ei");
+        bool vastus = await DisplayAlert("Kinnitus", "Kas soovid lumememme värvi muuta?", "Jah", "Ei");
 
         if (vastus)
         {
@@ -332,7 +276,28 @@ public partial class Lumememm : ContentPage
         }
         else
         {
-            tegevusLbl.Text = "Värvi ei muudetud";
+            tegevusLbl.Text = "Lumememme värvi ei muudetud";
+        }
+    }
+
+    private async Task MuudaAmbriVarvi()
+    {
+        bool vastus = await DisplayAlert("Kinnitus", "Kas soovid ämbri värvi muuta?", "Jah", "Ei");
+
+        if (vastus)
+        {
+            Color uusVarv = Color.FromRgb(
+                rnd.Next(50, 256),
+                rnd.Next(50, 256),
+                rnd.Next(50, 256));
+
+            amber.BackgroundColor = uusVarv;
+
+            tegevusLbl.Text = "Ämbri värv muudeti";
+        }
+        else
+        {
+            tegevusLbl.Text = "Ämbri värvi ei muudetud";
         }
     }
 
@@ -341,19 +306,19 @@ public partial class Lumememm : ContentPage
         abs.IsVisible = true;
 
         await Task.WhenAll(
-            amber.FadeTo(0.2, kiirus),
-            pea.FadeTo(0.2, kiirus),
-            keha.FadeTo(0.2, kiirus),
-            vasakSilm.FadeTo(0.2, kiirus),
-            paremSilm.FadeTo(0.2, kiirus),
-            nina.FadeTo(0.2, kiirus),
-            nupp1.FadeTo(0.2, kiirus),
-            nupp2.FadeTo(0.2, kiirus),
-            nupp3.FadeTo(0.2, kiirus),
+            amber.FadeTo(0.2, 1000),
+            pea.FadeTo(0.2, 1000),
+            keha.FadeTo(0.2, 1000),
+            vasakSilm.FadeTo(0.2, 1000),
+            paremSilm.FadeTo(0.2, 1000),
+            nina.FadeTo(0.2, 1000),
+            nupp1.FadeTo(0.2, 1000),
+            nupp2.FadeTo(0.2, 1000),
+            nupp3.FadeTo(0.2, 1000),
 
-            amber.ScaleTo(0.7, kiirus),
-            pea.ScaleTo(0.7, kiirus),
-            keha.ScaleTo(0.7, kiirus)
+            amber.ScaleTo(0.7, 1000),
+            pea.ScaleTo(0.7, 1000),
+            keha.ScaleTo(0.7, 1000)
         );
 
         tegevusLbl.Text = "Lumememm sulas";
@@ -366,11 +331,12 @@ public partial class Lumememm : ContentPage
 
         for (int i = 0; i < 3; i++)
         {
-            await abs.TranslateTo(-30, 0, kiirus / 2);
-            await abs.TranslateTo(30, 0, kiirus / 2);
+            await abs.TranslateTo(-30, 0, 500);
+            await abs.TranslateTo(30, 0, 500);
         }
 
-        await abs.TranslateTo(0, 0, kiirus / 2);
+        await abs.TranslateTo(0, 0, 500);
+
         tegevusLbl.Text = "Tants tehtud";
     }
 }
